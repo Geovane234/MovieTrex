@@ -20,13 +20,15 @@ export const updateSearchCount = async (query: string, movie: Movie) =>{
         Query.equal('searchTerm', query)
     ])
 
+    console.log(`SLUT ==============>: ${database}`)
+
     if(result.documents.length > 0){
         const existingMovie = result.documents[0];
 
         await database.updateDocument(
             DATABASE_ID,
             COLLECTION_ID,
-            existingMovie?.$collectionId,
+            existingMovie?.$id,
             {
                 count: existingMovie.count + 1
 
@@ -54,4 +56,17 @@ export const updateSearchCount = async (query: string, movie: Movie) =>{
         
     }
     
+}
+
+export const getTrendingMovies = async(): Promise<TrendingMovie[] | undefined> => {
+    try {
+        const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
+            Query.limit(5),
+            Query.orderDesc('count')
+        ])
+        return result.documents as unknown as TrendingMovie[];
+    }catch (e) {
+        console.log(e);
+        return undefined;
+    }
 }

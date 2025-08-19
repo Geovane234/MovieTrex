@@ -10,11 +10,16 @@ import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { ActivityIndicator, FlatList, Image, Text, View } from 'react-native'
 
-const search = () => {
+const Search = () => {
 
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState('')
 
-  const {data:movies, loading, error, refetch: loadMovies, resetData} = useFetch(() => fetchMovies({
+
+  const {data:movies,
+      loading
+      , error,
+      refetch: loadMovies,
+      resetData} = useFetch(() => fetchMovies({
     query: searchQuery
   }), false)
 
@@ -22,16 +27,21 @@ const search = () => {
     const timeOutId = setTimeout(async() =>{
       if(searchQuery.trim()){
         await loadMovies();
-        if(movies?.length > 0 && movies[0])
-          await updateSearchCount(searchQuery, movies[0])
       }else{
         resetData();
       }
-    }, 500)
-    
+    }, 500);
+
     return () => clearTimeout(timeOutId)
 
-  }, [searchQuery])
+  }, [searchQuery]);
+
+    useEffect(() => {
+        if(movies?.length > 0 && movies?.[0]){
+             updateSearchCount(searchQuery, movies[0]);
+        }
+
+    }, [movies]);
 
   return (
     <View style={tw`flex-1 bg-primary`}>
@@ -56,13 +66,12 @@ const search = () => {
       ListHeaderComponent={
         <View style={tw`my-5`}>
         <SearchBar
-          onPress={() => router.push('/search')}
           placeholder="Search movies ..."
           value={searchQuery}
           onChangeText={(text) => setSearchQuery(text)}
         />
         {loading && (
-          <ActivityIndicator size='large' color='#0000ff'></ActivityIndicator>
+          <ActivityIndicator size='large' color='#0000ff' style={tw`my-3`}></ActivityIndicator>
         )}
 
         {error && (
@@ -83,7 +92,7 @@ const search = () => {
       ListEmptyComponent={
         !loading && !error ?  (
           <View style={tw`mt-10, px-5`}>
-            <Text style={tw`text-center, text-light-300, items-center`}>
+            <Text style={tw`text-center text-light-300`}>
               {searchQuery.trim() ? 'No movie found' : 'Search for a movie'}
             </Text>
 
@@ -96,4 +105,4 @@ const search = () => {
   )
 }
 
-export default search
+export default Search;
