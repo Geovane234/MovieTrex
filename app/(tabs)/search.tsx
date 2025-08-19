@@ -3,6 +3,7 @@ import SearchBar from '@/components/SearchBar'
 import { icons } from '@/constants/icons'
 import { images } from '@/constants/images'
 import { fetchMovies } from '@/services/api'
+import { updateSearchCount } from '@/services/appwrite'
 import useFetch from '@/services/useFetch'
 import tw from '@/tailwind'
 import { router } from 'expo-router'
@@ -21,6 +22,8 @@ const search = () => {
     const timeOutId = setTimeout(async() =>{
       if(searchQuery.trim()){
         await loadMovies();
+        if(movies?.length > 0 && movies[0])
+          await updateSearchCount(searchQuery, movies[0])
       }else{
         resetData();
       }
@@ -80,7 +83,7 @@ const search = () => {
       ListEmptyComponent={
         !loading && !error ?  (
           <View style={tw`mt-10, px-5`}>
-            <Text style={tw`text-center, text-light-300`}>
+            <Text style={tw`text-center, text-light-300, items-center`}>
               {searchQuery.trim() ? 'No movie found' : 'Search for a movie'}
             </Text>
 
