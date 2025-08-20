@@ -39,3 +39,13 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+## Configuring the .env
+
+All third-party resource configurations used in the project
+
+-[TMDB Api](https://developer.themoviedb.org/docs/getting-started): Get the API key from TMDB to get the content of the movies. Then define this constant in the .env EXPO_PUBLIC_MOVIE_API_KEY and set the value.
+-[appwrite](https://cloud.appwrite.io/): We will use appwrite to store user trends and videos commonly requested by users. You will need to take the values of the following constants from appwrite to put in the .env file EXPO_PUBLIC_APPWRITE_PROJECT_ID, EXPO_PUBLIC_APPWRITE_DATABASE_ID, EXPO_PUBLIC_APPWRITE_COLLECTION_ID
+
+
+EXPO_PUBLIC_BASE_URL='https://api.themoviedb.org/3/'
